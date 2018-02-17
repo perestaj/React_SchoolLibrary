@@ -16,7 +16,7 @@ const BookStatusSelector = ({status, userID, bookID, lendBook, returnBook, setBo
                 )}
 
                 {(status === bookStatus.REQUESTED || status === bookStatus.BORROWED) && (
-                    <a className="dropdown-item" style={{cursor: 'pointer'}} onClick={(event) => returnBook(event, userID, bookID)}>Returned</a>
+                    <a className="dropdown-item" style={{cursor: 'pointer'}} onClick={(event) => returnBook(event, userID, bookID)}>Available</a>
                 )}
 
                 <a className="dropdown-item" style={{cursor: 'pointer'}} onClick={(event) => setBookStatusToLost(event, userID, bookID)}>Lost</a>
