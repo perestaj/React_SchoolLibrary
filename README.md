@@ -15,6 +15,7 @@ In order to run and test the app you need to download and run the .NET Core proj
     
 In order to run ReactSchoolLibrary type: 
 ```sh
+$ npm install
 $ npm start
 ```
  
