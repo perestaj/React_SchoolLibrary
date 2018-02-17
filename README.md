@@ -19,37 +19,46 @@ $ npm start
 ```
  
 If you want to login you can use the following accounts:
-#####Administrator
+##### Administrator
+
 **username**: admin
 **password**: admin
+
 Description: can display and manage the list of books, loans, authors, publishers and users.
 
-#####Librarian
+
+##### Librarian
+
 **username**: barbara
 **password**: library
+
 Description: can display and manage the list of books, loans, authors and publishers
 
-#####Student
+##### Student
+
 **username**: bil
 **password**: bil
+
 Description: can display the list of books and request a book if they want to borrow it
 
+
 The application consists of four tabs:
-#####Home
+
+##### Home
 Home page
 
-#####Books
+##### Books
 Displays the list of all books in the library with their statuses (Available, Borrowed, Lost, Requested).
 
-#####Loans
+##### Loans
 Displays the books that have been requested, borrowed or lost. It enables the librarian to change the book status to "Borrowed" (when the requested book is being lent), "Available" (when a student returns the book) or "Lost" (when a student has lost the book).  
 
-#####Administration
-######Authors
+##### Administration
+###### Authors
 Displays the list of all authors of the books in the library
 
-######Publishers
+###### Publishers
 Displays the list of all publishers of the books in the library
 
-######Users
+###### Users
 Displays the list of all users
