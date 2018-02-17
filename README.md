@@ -22,6 +22,7 @@ If you want to login you can use the following accounts:
 ##### Administrator
 
 **username**: admin
+
 **password**: admin
 
 Description: can display and manage the list of books, loans, authors, publishers and users.
@@ -30,6 +31,7 @@ Description: can display and manage the list of books, loans, authors, publisher
 ##### Librarian
 
 **username**: barbara
+
 **password**: library
 
 Description: can display and manage the list of books, loans, authors and publishers
@@ -37,9 +39,11 @@ Description: can display and manage the list of books, loans, authors and publis
 ##### Student
 
 **username**: bil
+
 **password**: bil
 
 Description: can display the list of books and request a book if they want to borrow it
+
 
 
 The application consists of four tabs:
