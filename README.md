@@ -1,6 +1,10 @@
 # ReactSchoolLibrary
 
-ReactSchoolLibrary is a sample school library application that I wrote while learning React / Redux. The application was tested only in development mode.
+ReactSchoolLibrary is a sample school library application that I wrote while learning React / Redux. 
+
+The application was tested only in development mode.
+
+For Angular version of the application please go to: [AngularSchoolLibrary](https://github.com/perestaj/AngularSchoolLibrary).
 
 Installed packages:
 - redux
