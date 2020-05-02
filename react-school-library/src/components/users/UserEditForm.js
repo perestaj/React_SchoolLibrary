@@ -68,8 +68,8 @@ let UserEditForm = ({isAddMode, roles, handleSubmit, cancel, redirectToUsersList
                     <div className="form-group row">
                         <label className="col-sm-3 col-form-label">Role:</label>
                         <div className="col-sm-9">
-                            {roles.map(role=> (
-                                <div className="form-check" key={role.id}>
+                            {roles.map(role => (
+                                <div className="form-check" key={role.id.toString()}>
                                     <label className="form-check-label">
                                         <Field className="form-check-input" component="input" type="radio" name="role" value={role.id.toString()} />                                    
                                         {role.name}

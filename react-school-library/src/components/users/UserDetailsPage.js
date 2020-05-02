@@ -37,8 +37,9 @@ class UserDetailsPage extends Component {
     }     
     
     async save(values, dispatch) {
-        try {               
-            await dispatch(userActions.updateUser(values, this.props.history));
+        try {       
+            const user = {...values, role: +values.role}; 
+            await dispatch(userActions.updateUser(user, this.props.history));
         }
         catch(err) {
             if(err instanceof SubmissionError) {
@@ -57,9 +58,9 @@ class UserDetailsPage extends Component {
         
             if (userEditMode) {
                 const isAddMode = Number(this.props.match.params.id) === 0;
-
+                const userModel = {...user, role: user.role?.toString() };
                 return (
-                    <UserEditForm initialValues={user} isAddMode={isAddMode} roles={roles} onSubmit={this.save.bind(this)} cancel={this.cancel.bind(this)} 
+                    <UserEditForm initialValues={userModel} isAddMode={isAddMode} roles={roles} onSubmit={this.save.bind(this)} cancel={this.cancel.bind(this)} 
                                     redirectToUsersList={this.redirectToUsersList.bind(this)} />
                 );
             }
