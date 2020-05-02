@@ -1,44 +1,24 @@
-import AuthorizationService from "../authorization/AuthorizationService";
+import axios from "axios";
 
 class BookApi {
   static getBookStatuses() {
-    return fetch("http://localhost:4200/api/books/statuses").then(res => res);
+    return axios.get(`${process.env.REACT_APP_BASE_URL}/books/statuses`);
   }
 
   static getBooks() {
-    return fetch("http://localhost:4200/api/books").then(res => res);
+    return axios.get(`${process.env.REACT_APP_BASE_URL}/books`);
   }
 
   static getBook(bookID) {
-    return fetch(`http://localhost:4200/api/books/${bookID}`).then(res => res);
+    return axios.get(`${process.env.REACT_APP_BASE_URL}/books/${bookID}`);
   }
 
   static updateBook(book) {
-    var authorizationData = AuthorizationService.getAuthorizationData();
-
-    return fetch(`http://localhost:4200/api/books`, {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer " + authorizationData.token,
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(book)
-    });
+    return axios.post(`${process.env.REACT_APP_BASE_URL}/books`, book);
   }
 
   static deleteBook(bookID) {
-    var authorizationData = AuthorizationService.getAuthorizationData();
-    
-    return fetch(`http://localhost:4200/api/books/${bookID}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: "Bearer " + authorizationData.token,
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
-    .then(res => res);
+    return axios.delete(`${process.env.REACT_APP_BASE_URL}/books/${bookID}`);
   }
 }
 

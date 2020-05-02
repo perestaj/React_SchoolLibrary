@@ -12,14 +12,14 @@ const BookStatusSelector = ({status, userID, bookID, lendBook, returnBook, setBo
             </button>
             <div className="dropdown-menu" aria-labelledby="bookStatusSelector">
                 { status === bookStatus.REQUESTED && (
-                    <a className="dropdown-item" style={{cursor: 'pointer'}} onClick={(event) => lendBook(event, userID, bookID)}>Borrowed</a>
+                    <a href="# " className="dropdown-item" style={{cursor: 'pointer'}} onClick={(event) => lendBook(event, userID, bookID)}>Borrowed</a>
                 )}
 
                 {(status === bookStatus.REQUESTED || status === bookStatus.BORROWED) && (
-                    <a className="dropdown-item" style={{cursor: 'pointer'}} onClick={(event) => returnBook(event, userID, bookID)}>Available</a>
+                    <a href="# " className="dropdown-item" style={{cursor: 'pointer'}} onClick={(event) => returnBook(event, userID, bookID)}>Available</a>
                 )}
 
-                <a className="dropdown-item" style={{cursor: 'pointer'}} onClick={(event) => setBookStatusToLost(event, userID, bookID)}>Lost</a>
+                <a href="# " className="dropdown-item" style={{cursor: 'pointer'}} onClick={(event) => setBookStatusToLost(event, userID, bookID)}>Lost</a>
             </div>
         </div>
     );

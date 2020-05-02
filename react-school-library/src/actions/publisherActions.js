@@ -28,27 +28,19 @@ function createPublisherSuccess(publisher) {
 }
 
 export function loadPublishers() {
-    return (dispatch, getState) => {
-        PublisherApi.getPublishers().then(response => {
-            if (response.ok) {
-                response.json()
-                    .then(result => {
-                        dispatch(loadPublishersSuccess(result));
+    return async (dispatch, getState) => {
+      try {
+        const response = await PublisherApi.getPublishers();
+        const publishers = response.data;
 
-                        var publishersSearchFilter = getState().publisherReducer.publishersSearchFilter;
-
-                        var filteredPublishers = getFilteredPublishers(result, publishersSearchFilter);
-
-                        dispatch(loadFilteredPublishersSuccess(filteredPublishers));
-                    })
-            }           
-            else {
-                dispatch(ajaxCallError());
-            }
-        })
-            .catch(error => {
-                throw (error);
-            });
+        dispatch(loadPublishersSuccess(publishers));
+        var publishersSearchFilter = getState().publisherReducer.publishersSearchFilter;
+        var filteredPublishers = getFilteredPublishers(publishers, publishersSearchFilter);
+        dispatch(loadFilteredPublishersSuccess(filteredPublishers));
+      }
+      catch(error) {     
+        dispatch(ajaxCallError());
+      };
     };
 }
 
@@ -65,20 +57,18 @@ export function filterPublishers(publishersSearchFilter) {
 }
 
 export function deletePublisher(publisherID, history) {
-    return (dispatch, getState) => {
-       PublisherApi.deletePublisher(publisherID)
-        .then(response => {
-          if (response.ok) {
-            loadPublishers()(dispatch, getState);
-          } else if (response.status === 401) {
-            history.push("/login" + (history.location.pathname || ""));
-          } else {
-            dispatch(ajaxCallError());
-          }
-        })
-        .catch(error => {
-          throw error;
-        });
+    return async (dispatch, getState) => {
+      try {
+        await PublisherApi.deletePublisher(publisherID);
+        loadPublishers()(dispatch, getState);
+      }
+      catch(error) {
+        if (error.response.status === 401) {
+          history.push("/login" + (history.location.pathname || ""));
+        } else {
+          dispatch(ajaxCallError());
+        }
+      };
     };
   }
 
@@ -89,20 +79,18 @@ export function deletePublisher(publisherID, history) {
   }   
 
   export function updatePublisher(publisher, history) {
-    return dispatch => {
-      PublisherApi.updatePublisher(publisher)
-        .then(response => {
-          if (response.ok) {
-            history.push("/administration/publishers");
-          } else if (response.status === 401) {
-            history.push("/login" + (history.location.pathname || ""));
-          } else {
-            dispatch(ajaxCallError());
-          }
-        })
-        .catch(error => {
-          throw error;
-        });
+    return async dispatch => {
+      try {
+        await PublisherApi.updatePublisher(publisher);
+        history.push("/administration/publishers");
+      }
+      catch(error) {
+        if (error.response.status === 401) {
+          history.push("/login" + (history.location.pathname || ""));
+        } else {
+          dispatch(ajaxCallError());
+        }
+      };
     };
   }
   
@@ -113,21 +101,15 @@ export function deletePublisher(publisherID, history) {
   }
 
   export function loadPublisher(publisherID) {
-    return (dispatch, getState) => {
-        PublisherApi.getPublisher(publisherID)
-        .then(response => {
-            if (response.ok) {
-            response.json().then(publisher => {            
-                dispatch(loadPublisherSuccess(publisher));
-            });
-            } else {
-            dispatch(ajaxCallError());
-            }
-        })
-        .catch(error => {
-            throw error;
-        });        
-              
+    return async (dispatch) => {
+      try {
+        const response = await PublisherApi.getPublisher(publisherID);
+        const publisher = response.data;
+        dispatch(loadPublisherSuccess(publisher));
+      }
+      catch(error) {     
+        dispatch(ajaxCallError());
+      };
     };
   }
   

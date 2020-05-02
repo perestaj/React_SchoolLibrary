@@ -12,6 +12,9 @@ import { loadPublishers } from './actions/publisherActions';
 import { loadBookStatuses } from './actions/bookActions';
 import { loginFromToken } from './actions/authorizationActions';
 import { loadRoles } from './actions/userActions';
+import { registerInterceptors } from './api/Interceptors';
+
+registerInterceptors();
 
 const store = configureStore();
 

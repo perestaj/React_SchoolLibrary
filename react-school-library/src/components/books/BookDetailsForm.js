@@ -19,13 +19,6 @@ const BookDetailsForm = (props) => {
               </div>
 
               <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Release date:</label>
-                <div className="col-sm-9">
-                  <label className="col-form-label">{new Date(book.releaseDate).toLocaleDateString()}</label>
-                </div>
-              </div>
-
-              <div className="form-group row">
                 <label className="col-sm-3 col-form-label">Author(s):</label>
                 <div className="col-sm-9">
                  <label className="col-form-label">{book.authorsList}</label>

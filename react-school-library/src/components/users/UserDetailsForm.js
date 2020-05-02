@@ -46,13 +46,6 @@ const UserDetailsForm = ({user, edit, redirectToUsersList}) => {
               </div>
 
               <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Date Of Birth::</label>
-                <div className="col-sm-9">
-                    <label className="col-form-label">{user && user.dateOfBirth ? new Date(user.dateOfBirth).toLocaleDateString() : '' }</label>
-                </div>
-              </div>             
-
-              <div className="form-group row">
                 <div className="col-sm-offset-3 col-sm-9">                
                   <span style={{ marginRight: "20px" }}>
                     <button className="btn btn-primary" onClick={edit}>Edit</button>

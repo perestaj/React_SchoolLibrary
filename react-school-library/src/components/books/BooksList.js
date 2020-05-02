@@ -19,8 +19,7 @@ function BooksList({books, showDeleteButton, showRequestBook, sortField, request
                 <tr>
                     <th scope="col"><TableHeader title="Title" field={fields.TITLE} sortField={sortField} sort={sort} /></th>
                     <th scope="col"><TableHeader title="Author(s)" field={fields.AUTHORS} sortField={sortField} sort={sort} /></th>
-                    <th scope="col"><TableHeader title="Publisher" field={fields.PUBLISHER} sortField={sortField} sort={sort} /></th>
-                    <th scope="col"><TableHeader title="Release Date" field={fields.RELEASE_DATE} sortField={sortField} sort={sort} /></th>
+                    <th scope="col"><TableHeader title="Publisher" field={fields.PUBLISHER} sortField={sortField} sort={sort} /></th>                    
                     <th scope="col"><TableHeader title="Status" field={fields.STATUS} sortField={sortField} sort={sort} /></th>
                     <th scope="col" />                
                 </tr>
@@ -32,8 +31,7 @@ function BooksList({books, showDeleteButton, showRequestBook, sortField, request
                         <NavLink to={"/books/" + item.bookID}>{item.title}</NavLink>
                     </td>
                     <td>{item.authorsList}</td>
-                    <td>{item.publisherName}</td>
-                    <td>{new Date(item.releaseDate).toLocaleDateString()}</td>
+                    <td>{item.publisherName}</td>                    
                     <td>{item.statusName}</td>
                     <td>
                     {item.status === bookStatuses.AVAILABLE && showRequestBook && (

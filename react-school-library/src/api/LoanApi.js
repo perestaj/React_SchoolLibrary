@@ -1,71 +1,25 @@
-import AuthorizationService from '../authorization/AuthorizationService';
 import * as bookStatus from '../common/bookStatuses';
+import axios from "axios";
 
 class LoanApi {
     static getLoans() {
-        var authorizationData = AuthorizationService.getAuthorizationData();
-
-        return fetch("http://localhost:4200/api/loans", {
-            method: 'GET',
-            headers: {
-                'Authorization': "Bearer " + authorizationData.token,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }            
-        })
-        .then(res => res);
+        return axios.get(`${process.env.REACT_APP_BASE_URL}/loans`);
     }
 
     static returnBook(userID, bookID) {
-        var authorizationData = AuthorizationService.getAuthorizationData();
-
-        return fetch(`http://localhost:4200/api/loans/update/${userID}/${bookID}/${bookStatus.AVAILABLE}`, {
-            method: 'POST',
-            headers: {
-                'Authorization': "Bearer " + authorizationData.token,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then(res => res);
+        return axios.post(`${process.env.REACT_APP_BASE_URL}/loans/update/${userID}/${bookID}/${bookStatus.AVAILABLE}`);
     }
 
     static requestBook(bookID) {
-        var authorizationData = AuthorizationService.getAuthorizationData();
-
-        return fetch(`http://localhost:4200/api/loans/request?bookID=${bookID}`, {
-            method: 'POST',
-            headers: {
-                'Authorization': "Bearer " + authorizationData.token,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then(res => res);
+        return axios.post(`${process.env.REACT_APP_BASE_URL}/loans/request?bookID=${bookID}`);
     }
 
     static lendBook(userID, bookID) {
-        var authorizationData = AuthorizationService.getAuthorizationData();
-
-        return fetch(`http://localhost:4200/api/loans/update/${userID}/${bookID}/${bookStatus.BORROWED}`, {
-            method: 'POST',
-            headers: {
-                'Authorization': "Bearer " + authorizationData.token,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then(res => res);
+        return axios.post(`${process.env.REACT_APP_BASE_URL}/loans/update/${userID}/${bookID}/${bookStatus.BORROWED}`);
     }
 
     static setBookStatusToLost(userID, bookID) {
-        var authorizationData = AuthorizationService.getAuthorizationData();
-
-        return fetch(`http://localhost:4200/api/loans/update/${userID}/${bookID}/${bookStatus.LOST}`, {
-            method: 'POST',
-            headers: {
-                'Authorization': "Bearer " + authorizationData.token,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then(res => res);
+        return axios.post(`${process.env.REACT_APP_BASE_URL}/loans/update/${userID}/${bookID}/${bookStatus.LOST}`);
     }
 }
 

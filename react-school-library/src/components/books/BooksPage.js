@@ -16,10 +16,6 @@ class BooksPage extends Component {
     this.props.bookActions.loadBooks();
   }
 
-  componentWillReceiveProps(nextProps) {}
-
-  componentWillUnmount() {}
-
   handleInputChange(event) {
     const filter = { ...this.props.filter };   
 

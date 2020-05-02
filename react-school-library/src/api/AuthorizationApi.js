@@ -1,9 +1,8 @@
+import axios from "axios";
+
 class AuthorizationApi {
     static login(username, password) {
-        return fetch(`http://localhost:4200/api/users/token?userName=${username}&password=${password}`, {
-            method: 'POST'
-        })
-        .then(res => res);
+        return axios.post(`${process.env.REACT_APP_BASE_URL}/users/token?userName=${username}&password=${password}`);
     }
 }
 

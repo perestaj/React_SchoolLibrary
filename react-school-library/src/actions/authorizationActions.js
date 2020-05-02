@@ -43,35 +43,34 @@ export function logoff(history, redirectUrl) {
 }
 
 export function login(username, password, history, redirectUrl) {
-  return dispatch => {
-    return AuthorizationApi.login(username, password)
-      .then(res => {
-        if (res.ok) {
-          res.json().then(result => {
-            var authorizationData = new AuthorizationData(
-              result.token,
-              result.expiration,
-              result.userName,
-              result.role
-            );
-            AuthorizationService.authenticate(authorizationData);
+  return async dispatch => {
+    try {
+      const response = await AuthorizationApi.login(username, password);
+      const result = response.data;
 
-            dispatch(loginSuccess({username: result.userName, role: result.role, isLoggedIn: true}));
+      var authorizationData = new AuthorizationData(
+        result.token,
+        result.expiration,
+        result.userName,
+        result.role
+      );
 
-            if (redirectUrl && redirectUrl.length > 0) {
-              history.push("/" + redirectUrl);
-            }
-          });
-        } else if (res.status === 400) {          
-          throw new SubmissionError({            
-            _error: 'Invalid Username or Password!'
-          });
-        } else {
-          dispatch(ajaxCallError());
-        }
-      })
-      .catch(error => {
-        throw error;
-      });
+      AuthorizationService.authenticate(authorizationData);
+
+      dispatch(loginSuccess({username: result.userName, role: result.role, isLoggedIn: true}));
+
+      if (redirectUrl && redirectUrl.length > 0) {
+        history.push("/" + redirectUrl);
+      }
+    }
+    catch(error) {
+      if (error.response.status === 400) {
+        throw new SubmissionError({            
+          _error: 'Invalid Username or Password!'
+        });
+      } else {
+        dispatch(ajaxCallError());
+      }
+    };
   };
 }

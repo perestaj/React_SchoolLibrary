@@ -28,27 +28,19 @@ function createAuthorSuccess(author) {
 }
 
 export function loadAuthors() {
-    return (dispatch, getState) => {
-        AuthorApi.getAuthors().then(response => {
-            if (response.ok) {
-                response.json()
-                    .then(result => {
-                        dispatch(loadAuthorsSuccess(result));
+    return async (dispatch, getState) => {
+      try {
+        const request = await AuthorApi.getAuthors();
+        const authors = request.data;
 
-                        var authorsSearchFilter = getState().authorReducer.authorsSearchFilter;
-
-                        var filteredAuthors = getFilteredAuthors(result, authorsSearchFilter);
-
-                        dispatch(loadFilteredAuthorsSuccess(filteredAuthors));
-                    })
-            }           
-            else {
-                dispatch(ajaxCallError());
-            }
-        })
-            .catch(error => {
-                throw (error);
-            });
+        dispatch(loadAuthorsSuccess(authors));
+        var authorsSearchFilter = getState().authorReducer.authorsSearchFilter;
+        var filteredAuthors = getFilteredAuthors(authors, authorsSearchFilter);
+        dispatch(loadFilteredAuthorsSuccess(filteredAuthors));
+      }
+      catch(error) {     
+            dispatch(ajaxCallError());
+      };
     };
 }
 
@@ -65,20 +57,18 @@ export function filterAuthors(authorsSearchFilter) {
 }
 
 export function deleteAuthor(authorID, history) {
-    return (dispatch, getState) => {
-       AuthorApi.deleteAuthor(authorID)
-        .then(response => {
-          if (response.ok) {
-            loadAuthors()(dispatch, getState);
-          } else if (response.status === 401) {
-            history.push("/login" + (history.location.pathname || ""));
-          } else {
-            dispatch(ajaxCallError());
-          }
-        })
-        .catch(error => {
-          throw error;
-        });
+    return async (dispatch, getState) => {
+      try {
+        await AuthorApi.deleteAuthor(authorID);
+        loadAuthors()(dispatch, getState);
+      }
+      catch(error) {
+        if (error.response.status === 401) {
+          history.push("/login" + (history.location.pathname || ""));
+        } else {
+          dispatch(ajaxCallError());
+        }
+      };
     };
   }
 
@@ -89,20 +79,18 @@ export function deleteAuthor(authorID, history) {
   }   
 
   export function updateAuthor(author, history) {
-    return dispatch => {
-      AuthorApi.updateAuthor(author)
-        .then(response => {
-          if (response.ok) {
-            history.push("/administration/authors");
-          } else if (response.status === 401) {
-            history.push("/login" + (history.location.pathname || ""));
-          } else {
-            dispatch(ajaxCallError());
-          }
-        })
-        .catch(error => {
-          throw error;
-        });
+    return async dispatch => {
+      try {
+        await AuthorApi.updateAuthor(author);
+        history.push("/administration/authors");
+      }
+      catch(error) {
+        if (error.response.status === 401) {
+          history.push("/login" + (history.location.pathname || ""));
+        } else {
+          dispatch(ajaxCallError());
+        }
+      };
     };
   }
   
@@ -113,21 +101,15 @@ export function deleteAuthor(authorID, history) {
   }
 
   export function loadAuthor(authorID) {
-    return (dispatch, getState) => {
-        AuthorApi.getAuthor(authorID)
-        .then(response => {
-            if (response.ok) {
-            response.json().then(author => {            
-                dispatch(loadAuthorSuccess(author));
-            });
-            } else {
-            dispatch(ajaxCallError());
-            }
-        })
-        .catch(error => {
-            throw error;
-        });        
-              
+    return async (dispatch) => {
+      try {
+        const result = await AuthorApi.getAuthor(authorID);
+        const author = result.data;
+        dispatch(loadAuthorSuccess(author));
+      }
+      catch(error) {     
+        dispatch(ajaxCallError());
+      };
     };
   }
   

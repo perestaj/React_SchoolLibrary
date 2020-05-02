@@ -19,7 +19,7 @@ class UserDetailsPage extends Component {
             this.props.actions.createUser({});
             this.props.actions.setUserEditMode(true);     
         } else {
-          this.props.actions.loadUser(id);
+          this.props.actions.loadUser(id, this.props.history);
         }
     }
 

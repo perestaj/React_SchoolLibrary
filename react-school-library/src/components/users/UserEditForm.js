@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { InputField, DatePickerField } from '../common/Fields';
+import { InputField } from '../common/Fields';
 
 let UserEditForm = ({isAddMode, roles, handleSubmit, cancel, redirectToUsersList, error}) => {
     
@@ -62,13 +62,6 @@ let UserEditForm = ({isAddMode, roles, handleSubmit, cancel, redirectToUsersList
                         <label className="col-sm-3 col-form-label">Address:</label>
                         <div className="col-sm-9">
                             <Field name="address" type="text" placeholder="Enter address" component={InputField}  />
-                        </div>
-                    </div>
-
-                    <div className="form-group row">
-                        <label className="col-sm-3 col-form-label">Date Of Birth:</label>
-                        <div className="col-sm-9">                 
-                            <Field name="dateOfBirth" component={DatePickerField} />                  
                         </div>
                     </div>
 

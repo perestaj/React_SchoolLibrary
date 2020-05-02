@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { InputField, DatePickerField, SelectField } from '../common/Fields';
+import { InputField, SelectField } from '../common/Fields';
 
 let BookEditForm = ({handleSubmit, authors, publishers, isAddMode, cancel, redirectToBooksList}) => {
       
@@ -23,17 +23,10 @@ let BookEditForm = ({handleSubmit, authors, publishers, isAddMode, cancel, redir
               </div>
 
               <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Release date:</label>
-                <div className="col-sm-9">                 
-                    <Field name="releaseDate" component={DatePickerField} />                  
-                </div>
-              </div>
-
-              <div className="form-group row">
                 <label className="col-sm-3 col-form-label">Author(s):</label>
                 <div className="col-sm-9">                 
                     <Field name="authorIds" multiple={true} component={SelectField}>
-                      {authors.map(author => <option key={author.authorID} value={author.authorID}>{author.fullName}</option>)}
+                      {authors.map(author => <option key={+author.authorID} value={+author.authorID}>{author.fullName}</option>)}
                     </Field>                                                                            
                 </div>
               </div>
@@ -43,7 +36,7 @@ let BookEditForm = ({handleSubmit, authors, publishers, isAddMode, cancel, redir
                 <div className="col-sm-9">                 
                     <Field name="publisherID" component={SelectField}>
                     <option>-- select publisher --</option>
-                        {publishers.map(publisher => <option key={publisher.publisherID} value={publisher.publisherID}>{publisher.name}</option>)}
+                        {publishers.map(publisher => <option key={+publisher.publisherID} value={+publisher.publisherID}>{publisher.name}</option>)}
                     </Field>                                       
                 </div>
               </div>
@@ -79,10 +72,6 @@ const validate = values => {
 
   if (values.title && values.title.length > 100) {
     errors.title = 'The field cannot contain more than 100 characters';
-  }
-
-  if (!values.releaseDate) {
-    errors.releaseDate = 'Field required';
   }
 
   if (!values.authorIds || values.authorIds.length === 0) {

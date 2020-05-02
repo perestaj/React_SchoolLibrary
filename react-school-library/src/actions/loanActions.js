@@ -91,123 +91,89 @@ export function filterLoans(loansSearchFilter) {
     };
 }
 
-export function loadLoans() {
-    return (dispatch, getState) => {
-        LoanApi.getLoans().then(response => {
-            if (response.ok) {
-                response.json()
-                    .then(loans => {
-                        dispatch(loadLoansSuccess(loans));
+export function loadLoans(history) {
+    return async (dispatch, getState) => {
+        try {
+            const response = await LoanApi.getLoans();
+            const loans = response.data;
+            dispatch(loadLoansSuccess(loans));
 
-                        var loansSearchFilter = getState().loanReducer.loansSearchFilter;
+            var loansSearchFilter = getState().loanReducer.loansSearchFilter;
+            var filteredLoans = getFilteredLoans(loans, loansSearchFilter);
 
-                        var filteredLoans = getFilteredLoans(loans, loansSearchFilter);
-
-                        dispatch(loadFilteredLoansSuccess(filteredLoans));
-
-                        dispatch(ajaxCallSuccess());
-                    })
+            dispatch(loadFilteredLoansSuccess(filteredLoans));
+            dispatch(ajaxCallSuccess());
+        }
+        catch(error) {
+            if (error.response.status === 401) {
+              history.push("/login" + (history.location.pathname || ""));
+            } else {
+              dispatch(ajaxCallError());
             }
-            else {
-                dispatch(ajaxCallError());
-            }
-        })
-            .catch(error => {
-                throw (error);
-            });
+        };
     };
 }
 
-
-
 export function requestBook(bookID, history) {
-    return (dispatch, getState) => {
-        LoanApi.requestBook(bookID)
-            .then(response => {
-                if (response.ok) {
-                    response.json()
-                        .then(result => {
-                            loadBooks()(dispatch, getState);
-                        })
-                }
-                else if (response.status === 401) {
-                    history.push('/login' + (history.location.pathname || ''));
-                }
-                else {
-                    dispatch(ajaxCallError());
-                }
-            })
-            .catch(error => {
-                throw (error);
-            });
+    return async (dispatch, getState) => {
+        try {
+            await LoanApi.requestBook(bookID);
+            loadBooks()(dispatch, getState);
+        }
+        catch(error) {
+            if (error.response.status === 401) {
+              history.push("/login" + (history.location.pathname || ""));
+            } else {
+              dispatch(ajaxCallError());
+            }
+        };
     };
 }
 
 export function returnBook(userID, bookID, history) {
-    return (dispatch, getState) => {
-        LoanApi.returnBook(userID, bookID)
-            .then(response => {
-                if (response.ok) {
-                    response.json()
-                        .then(result => {
-                            loadLoans()(dispatch, getState);
-                        })
-                }
-                else if (response.status === 404) {
-                    history.push('/login' + (history.location.pathname || ''));
-                }
-                else {
-                    dispatch(ajaxCallError());
-                }
-            })
-            .catch(error => {
-                throw (error);
-            });
+    return async (dispatch, getState) => {
+        try {
+            await LoanApi.returnBook(userID, bookID);
+            loadLoans()(dispatch, getState);
+        }
+        catch(error) {
+            if (error.response.status === 401) {
+              history.push("/login" + (history.location.pathname || ""));
+            } else {
+              dispatch(ajaxCallError());
+            }
+        };
     };
 }
 
 export function lendBook(userID, bookID, history) {
-    return (dispatch, getState) => {
-        LoanApi.lendBook(userID, bookID)
-            .then(response => {
-                if (response.ok) {
-                    response.json()
-                        .then(result => {
-                            loadLoans()(dispatch, getState);
-                        })
-                }
-                else if (response.status === 404) {
-                    history.push('/login' + (history.location.pathname || ''));
-                }
-                else {
-                    dispatch(ajaxCallError());
-                }
-            })
-            .catch(error => {
-                throw (error);
-            });
+    return async (dispatch, getState) => {
+        try {
+            await LoanApi.lendBook(userID, bookID);
+            loadLoans()(dispatch, getState);
+        }
+        catch(error) {
+            if (error.response.status === 401) {
+              history.push("/login" + (history.location.pathname || ""));
+            } else {
+              dispatch(ajaxCallError());
+            }
+        };        
     };
 }
 
 export function setBookStatusToLost(userID, bookID, history) {
-    return (dispatch, getState) => {
-        LoanApi.setBookStatusToLost(userID, bookID)
-            .then(response => {
-                if (response.ok) {
-                    response.json()
-                        .then(result => {
-                            loadLoans()(dispatch, getState);
-                        })
-                }
-                else if (response.status === 404) {
-                    history.push('/login' + (history.location.pathname || ''));
-                }
-                else {
-                    dispatch(ajaxCallError());
-                }
-            })
-            .catch(error => {
-                throw (error);
-            });
+    return async (dispatch, getState) => {
+        try {
+            await LoanApi.setBookStatusToLost(userID, bookID);
+            loadLoans()(dispatch, getState);
+        }
+        catch(error) {
+            if (error.response.status === 401) {
+              history.push("/login" + (history.location.pathname || ""));
+            } else {
+              dispatch(ajaxCallError());
+            }
+        };
     };
 }

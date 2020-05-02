@@ -1,41 +1,20 @@
-import AuthorizationService from "../authorization/AuthorizationService";
+import axios from "axios";
 
 class PublisherApi {
     static getPublishers() {
-        return fetch("http://localhost:4200/api/publishers")
-            .then(res => res);
+        return axios.get(`${process.env.REACT_APP_BASE_URL}/publishers`);
     }
 
     static getPublisher(publisherID) {
-      return fetch(`http://localhost:4200/api/publishers/${publisherID}`).then(res => res);
+      return axios.get(`${process.env.REACT_APP_BASE_URL}/publishers/${publisherID}`);
     }
 
-    static updatePublisher(publisher) {
-      var AuthorizationData = AuthorizationService.getAuthorizationData();
-  
-      return fetch(`http://localhost:4200/api/publishers`, {
-        method: "POST",
-        headers: {
-        Authorization: "Bearer " + AuthorizationData.token,
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(publisher)
-      });
+    static updatePublisher(publisher) {  
+      return axios.post(`${process.env.REACT_APP_BASE_URL}/publishers`, publisher);
     }
 
-    static deletePublisher(publisherID) {
-        var AuthorizationData = AuthorizationService.getAuthorizationData();
-        
-        return fetch(`http://localhost:4200/api/publishers/${publisherID}`, {
-          method: "DELETE",
-          headers: {
-            Authorization: "Bearer " + AuthorizationData.token,
-            Accept: "application/json",
-            "Content-Type": "application/json"
-          }
-        })
-        .then(res => res);
+    static deletePublisher(publisherID) {        
+        return axios.delete(`${process.env.REACT_APP_BASE_URL}/publishers/${publisherID}`);
       }
 }
 

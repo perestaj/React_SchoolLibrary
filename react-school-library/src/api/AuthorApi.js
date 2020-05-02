@@ -1,42 +1,21 @@
-import AuthorizationService from "../authorization/AuthorizationService";
+import axios from "axios";
 
 class AuthorApi {
     static getAuthors() {
-        return fetch("http://localhost:4200/api/authors")
-            .then(res => res);
+        return axios.get(`${process.env.REACT_APP_BASE_URL}/authors`);
     }
 
     static getAuthor(authorID) {
-      return fetch(`http://localhost:4200/api/authors/${authorID}`).then(res => res);
+      return axios.get(`${process.env.REACT_APP_BASE_URL}/authors/${authorID}`);
     }
 
-    static updateAuthor(author) {
-      var authorizationData = AuthorizationService.getAuthorizationData();
-  
-      return fetch(`http://localhost:4200/api/authors`, {
-        method: "POST",
-        headers: {
-          Authorization: "Bearer " + authorizationData.token,
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(author)
-      });
+    static updateAuthor(author) {  
+      return axios.post(`${process.env.REACT_APP_BASE_URL}/authors`, author);
     }
 
     static deleteAuthor(authorID) {
-        var authorizationData = AuthorizationService.getAuthorizationData();
-        
-        return fetch(`http://localhost:4200/api/authors/${authorID}`, {
-          method: "DELETE",
-          headers: {
-            Authorization: "Bearer " + authorizationData.token,
-            Accept: "application/json",
-            "Content-Type": "application/json"
-          }
-        })
-        .then(res => res);
-      }
+      return axios.delete(`${process.env.REACT_APP_BASE_URL}/authors/${authorID}`);
+    }
 }
 
 export default AuthorApi;

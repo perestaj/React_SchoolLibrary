@@ -1,67 +1,25 @@
-import AuthorizationService from "../authorization/AuthorizationService";
+import axios from "axios";
 
 class UserApi {
     static getRoles() {
-        return fetch("http://localhost:4200/api/users/roles", {
-            method: "GET"            
-        })
-        .then(res => res);
+        return axios.get(`${process.env.REACT_APP_BASE_URL}/users/roles`);
     }
     
     static getUsers() {
-        var authorizationData = AuthorizationService.getAuthorizationData();
-
-        return fetch("http://localhost:4200/api/users", {
-            method: "GET",
-            headers: {
-                Authorization: "Bearer " + authorizationData.token,
-                Accept: "application/json",
-                "Content-Type": "application/json"
-              }
-        })
-        .then(res => res);
+        return axios.get(`${process.env.REACT_APP_BASE_URL}/users`);
     }
 
     static getUser(userID) {
-      var authorizationData = AuthorizationService.getAuthorizationData();  
-      return fetch(`http://localhost:4200/api/users/${userID}`, {
-        method: "GET",
-        headers: {
-            Authorization: "Bearer " + authorizationData.token,
-            Accept: "application/json",
-            "Content-Type": "application/json"
-          }
-      })
-      .then(res => res);
+      return axios.get(`${process.env.REACT_APP_BASE_URL}/users/${userID}`);
     }
 
-    static updateUser(user) {
-      var authorizationData = AuthorizationService.getAuthorizationData();
-  
-      return fetch(`http://localhost:4200/api/users`, {
-        method: "POST",
-        headers: {
-          Authorization: "Bearer " + authorizationData.token,
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(user)
-      });
+    static updateUser(user) {      
+      return axios.post(`${process.env.REACT_APP_BASE_URL}/users`, user);
     }
 
-    static deleteUser(userID) {
-        var authorizationData = AuthorizationService.getAuthorizationData();
-        
-        return fetch(`http://localhost:4200/api/users/${userID}`, {
-          method: "DELETE",
-          headers: {
-            Authorization: "Bearer " + authorizationData.token,
-            Accept: "application/json",
-            "Content-Type": "application/json"
-          }
-        })
-        .then(res => res);
-      }
+    static deleteUser(userID) {        
+        return axios.delete(`${process.env.REACT_APP_BASE_URL}/users/${userID}`);
+    }
 }
 
 export default UserApi;

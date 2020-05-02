@@ -38,38 +38,34 @@ export function createBook() {
 }
 
 export function deleteBook(bookID, history) {
-  return (dispatch, getState) => {
-    BookApi.deleteBook(bookID)
-      .then(response => {
-        if (response.ok) {
-          loadBooks()(dispatch, getState);
-        } else if (response.status === 401) {
-          history.push("/login" + (history.location.pathname || ""));
-        } else {
-          dispatch(ajaxCallError());
-        }
-      })
-      .catch(error => {
-        throw error;
-      });
+  return async (dispatch, getState) => {
+    try {
+      await BookApi.deleteBook(bookID);
+      loadBooks()(dispatch, getState);
+    }
+    catch(error) {
+      if (error.response.status === 401) {
+        history.push("/login" + (history.location.pathname || ""));
+      } else {
+        dispatch(ajaxCallError());
+      }
+    };
   };
 }
 
 export function updateBook(book, history) {
-  return dispatch => {
-    BookApi.updateBook(book)
-      .then(response => {
-        if (response.ok) {
-          history.push("/books");
-        } else if (response.status === 401) {
-          history.push("/login" + (history.location.pathname || ""));
-        } else {
-          dispatch(ajaxCallError());
-        }
-      })
-      .catch(error => {
-        throw error;
-      });
+  return async dispatch => {
+    try {
+      await BookApi.updateBook(book);
+      history.push("/books");
+    }
+    catch(error) {
+      if (error.response.status === 401) {
+        history.push("/login" + (history.location.pathname || ""));
+      } else {
+        dispatch(ajaxCallError());
+      }
+    };
   };
 }
 
@@ -80,20 +76,15 @@ export function setBookEditMode(isEdit) {
 }
 
 export function loadBookStatuses() {
-  return dispatch => {
-    BookApi.getBookStatuses()
-      .then(response => {
-        if (response.ok) {
-          response.json().then(result => {
-            dispatch(loadBookStatusesSuccess(result));
-          });
-        } else {
-          dispatch(ajaxCallError());
-        }
-      })
-      .catch(error => {
-        throw error;
-      });
+  return async dispatch => {
+    try {
+      const response = await BookApi.getBookStatuses();
+      const statuses = response.data;
+      dispatch(loadBookStatusesSuccess(statuses));
+    }
+    catch(error) {     
+      dispatch(ajaxCallError());
+    };    
   };
 }
 
@@ -151,11 +142,7 @@ function getFilteredBooks(books, booksSearchFilter) {
         else if (booksSearchFilter.booksSortField === fields.PUBLISHER) {
           firstField = first.publisherName.toUpperCase();
           secondField = second.publisherName.toUpperCase();          
-        }
-        else if (booksSearchFilter.booksSortField === fields.RELEASE_DATE) {
-          firstField = first.releaseDate;
-          secondField = second.releaseDate;          
-        }
+        }        
         else if (booksSearchFilter.booksSortField === fields.STATUS) {
           firstField = first.statusName.toUpperCase();
           secondField = second.statusName.toUpperCase();          
@@ -177,45 +164,33 @@ function getFilteredBooks(books, booksSearchFilter) {
 }
 
 export function loadBooks() {
-  return (dispatch, getState) => {
-    BookApi.getBooks()
-      .then(response => {
-        if (response.ok) {
-          response.json().then(books => {
-            dispatch(loadBooksSuccess(books));
+  return async (dispatch, getState) => {
+    try {
+      const response = await BookApi.getBooks();      
+      const books = response.data;          
+      dispatch(loadBooksSuccess(books));
 
-            var booksSearchFilter = getState().bookReducer.booksSearchFilter;
+      var booksSearchFilter = getState().bookReducer.booksSearchFilter;
+      var filteredBooks = getFilteredBooks(books, booksSearchFilter);
 
-            var filteredBooks = getFilteredBooks(books, booksSearchFilter);
-
-            dispatch(loadFilteredBooksSuccess(filteredBooks));
-
-            dispatch(ajaxCallSuccess());
-          });
-        } else {
-          dispatch(ajaxCallError());
-        }
-      })
-      .catch(error => {
-        throw error;
-      });
+      dispatch(loadFilteredBooksSuccess(filteredBooks));
+      dispatch(ajaxCallSuccess());
+    }
+    catch(error) {     
+      dispatch(ajaxCallError());
+    };      
   };
 }
 
 export function loadBook(bookID) {
-  return dispatch => {
-    BookApi.getBook(bookID)
-      .then(response => {
-        if (response.ok) {
-          response.json().then(book => {            
-            dispatch(loadBookSuccess(book));
-          });
-        } else {
-          dispatch(ajaxCallError());
-        }
-      })
-      .catch(error => {
-        throw error;
-      });
+  return async dispatch => {
+    try {
+      const response = await BookApi.getBook(bookID);
+      const book = response.data;
+      dispatch(loadBookSuccess(book));
+    }
+    catch(error) {     
+      dispatch(ajaxCallError());
+    };
   };
 }

@@ -22,14 +22,10 @@ class BookDetailsPage extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {    
-  }
-
   componentWillUnmount() {
     this.props.actions.setBookEditMode(false);
   }
   
-
   redirectToBooksList() {
     this.props.history.push("/books");
   }
@@ -39,9 +35,11 @@ class BookDetailsPage extends Component {
     this.props.actions.setBookEditMode(true);
   }
  
-
-  save(values) {   
-    this.props.actions.updateBook(values, this.props.history);
+  save(values) {
+    const book = {...values};
+    book.authorIds = values.authorIds.map(id => +id);
+    book.publisherID = +values.publisherID;
+    this.props.actions.updateBook(book, this.props.history);
   }
 
   cancel(event) {

@@ -9,7 +9,7 @@ import LoansList from './LoansList';
 
 class LoansPage extends Component {
     componentDidMount() {
-        this.props.actions.loadLoans();
+        this.props.actions.loadLoans(this.props.history);
     }
 
     handleInputChange(event) {

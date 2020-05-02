@@ -10,7 +10,7 @@ import UserSearchFilter from './UserSearchFilter';
 
 class UsersPage extends Component {
     componentDidMount(props, context) {
-        this.props.userActions.loadUsers();
+        this.props.userActions.loadUsers(this.props.history);
     }
 
     add(event) {

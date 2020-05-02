@@ -34,45 +34,36 @@ function createUserSuccess(user) {
 }
 
 export function loadRoles() {
-    return (dispatch)=>{
-        UserApi.getRoles()
-        .then(response => {
-            if (response.ok) {
-            response.json().then(roles => {            
-                dispatch(loadRolesSuccess(roles));
-            });
-            } else {
+    return async (dispatch) => {
+        try {
+            const response = await UserApi.getRoles();
+            const roles = response.data;
+            dispatch(loadRolesSuccess(roles));
+        }
+        catch(error) {     
             dispatch(ajaxCallError());
-            }
-        })
-        .catch(error => {
-            throw error;
-        });  
+        };
     }
 }
 
-export function loadUsers() {
-    return (dispatch, getState) => {
-        UserApi.getUsers().then(response => {
-            if (response.ok) {
-                response.json()
-                    .then(result => {
-                        dispatch(loadUsersSuccess(result));
+export function loadUsers(history) {
+    return async (dispatch, getState) => {
+        try {
+            const response = await UserApi.getUsers();
+            const users = response.data;
 
-                        var usersSearchFilter = getState().userReducer.usersSearchFilter;
-
-                        var filteredUsers = getFilteredUsers(result, usersSearchFilter);
-
-                        dispatch(loadFilteredUsersSuccess(filteredUsers));
-                    })
-            }           
-            else {
-                dispatch(ajaxCallError());
+            dispatch(loadUsersSuccess(users));
+            var usersSearchFilter = getState().userReducer.usersSearchFilter;
+            var filteredUsers = getFilteredUsers(users, usersSearchFilter);
+            dispatch(loadFilteredUsersSuccess(filteredUsers));
+        }
+        catch(error) {
+            if (error.response.status === 401) {
+              history.push("/login" + (history.location.pathname || ""));
+            } else {
+              dispatch(ajaxCallError());
             }
-        })
-            .catch(error => {
-                throw (error);
-            });
+        };
     };
 }
 
@@ -89,20 +80,18 @@ export function filterUsers(usersSearchFilter) {
 }
 
 export function deleteUser(userID, history) {
-    return (dispatch, getState) => {
-       UserApi.deleteUser(userID)
-        .then(response => {
-          if (response.ok) {
+    return async (dispatch, getState) => {
+        try {
+            await UserApi.deleteUser(userID);
             loadUsers()(dispatch, getState);
-          } else if (response.status === 401) {
-            history.push("/login" + (history.location.pathname || ""));
-          } else {
-            dispatch(ajaxCallError());
-          }
-        })
-        .catch(error => {
-          throw error;
-        });
+        }
+        catch(error) {
+            if (error.response.status === 401) {
+              history.push("/login" + (history.location.pathname || ""));
+            } else {
+              dispatch(ajaxCallError());
+            }
+        };
     };
   }
 
@@ -113,36 +102,30 @@ export function deleteUser(userID, history) {
   }   
 
   export function updateUser(user, history) {
-    return dispatch => {
-      return UserApi.updateUser(user)
-        .then(response => {            
-          if (response.ok) {
-            return response.json().then(result=> {
-                if (result.success) {
-                    history.push("/administration/users");
-                } else if (result.userNameTaken) {
-                    throw new SubmissionError({            
-                        _error: 'Username already taken!'
-                      });
-                }
-                else if (result.emailTaken) {
-                    throw new SubmissionError({            
-                        _error: 'Email is already taken!'
-                      });
-                }
-                else {
-                    dispatch(ajaxCallError());
-                }
-            });            
-          } else if (response.status === 401) {
-            history.push("/login" + (history.location.pathname || ""));
-          } else {
-            dispatch(ajaxCallError());
-          }
-        })
-        .catch(error => {
-          throw error;
-        });
+    return async dispatch => {
+        try {
+            const response = await UserApi.updateUser(user);
+            if (response.data.success) {
+                history.push("/administration/users");
+            } else if (response.data.userNameTaken) {
+                throw new SubmissionError({            
+                    _error: 'Username already taken!'
+                  });
+            } else if (response.data.emailTaken) {
+                throw new SubmissionError({            
+                    _error: 'Email is already taken!'
+                  });
+            } else {
+                dispatch(ajaxCallError());
+            }
+        }
+        catch(error) {
+            if (error.response.status === 401) {
+              history.push("/login" + (history.location.pathname || ""));
+            } else {
+              dispatch(ajaxCallError());
+            }
+        };
     };
   }
   
@@ -152,25 +135,22 @@ export function deleteUser(userID, history) {
     };
   }
 
-  export function loadUser(userID) {
-    return (dispatch, getState) => {
-        UserApi.getUser(userID)
-        .then(response => {
-            if (response.ok) {
-            response.json().then(user => {            
-                dispatch(loadUserSuccess(user));
-            });
+  export function loadUser(userID, history) {
+    return async (dispatch) => {
+        try {
+            const response = await UserApi.getUser(userID);
+            const user = response.data;
+            dispatch(loadUserSuccess(user));
+        }
+        catch(error) {
+            if (error.response.status === 401) {
+              history.push("/login" + (history.location.pathname || ""));
             } else {
-            dispatch(ajaxCallError());
+              dispatch(ajaxCallError());
             }
-        })
-        .catch(error => {
-            throw error;
-        });        
-              
+        };
     };
-  }
-  
+  }  
 
 function getFilteredUsers(users, usersSearchFilter) {
     if (!usersSearchFilter) {
