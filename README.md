@@ -2,9 +2,7 @@
 
 ReactSchoolLibrary is a sample school library application that I wrote while learning React / Redux. 
 
-The application was tested only in development mode.
-
-For Angular version of the application please go to: [AngularSchoolLibrary](https://github.com/perestaj/AngularSchoolLibrary).
+For Angular version of the application please go to: [AngularSchoolLibrary](https://github.com/perestaj/Angular_SchoolLibrary).
 
 Installed packages:
 - redux
@@ -22,6 +20,7 @@ In order to run ReactSchoolLibrary type:
 $ npm install
 $ npm start
 ```
+ If you want to run the application in the docker container navigate to the react-school-library subdirectory (where docker-compose.yml file is located) and run the following command in the terminal: docker-compose up. The application will be accessible under http://127.0.0.1:3000
  
 If you want to login you can use the following accounts:
 ##### Administrator
